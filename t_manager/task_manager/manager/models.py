@@ -13,10 +13,11 @@ class User(AbstractUser):
     slug = models.SlugField(max_length=150, unique=True, db_index=True, verbose_name='URL', null=True)
 
     def __str__(self):
-        return self.username
+        return self.email
 
 
 class Task(models.Model):
+    users = models.ManyToManyField(User, blank=True, null=True)
     title = models.CharField(max_length=150)
     content = models.TextField(blank=True)
     published_at = models.DateTimeField(auto_now_add=True)

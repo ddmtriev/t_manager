@@ -1,7 +1,7 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from .models import *
 from django.views.generic import ListView, DetailView, CreateView, FormView
@@ -97,7 +97,7 @@ class MainView(ListView):
         return context
 
     def get_queryset(self):
-        return Task.objects.filter(status=False)
+        return Task.objects.filter(status=False, users=self.request.user.id)
 
 
 class CreateTask(LoginRequiredMixin, CreateView):
@@ -125,16 +125,8 @@ class FavTaskView(ListView):
         return context
 
     def get_queryset(self):
-        return Task.objects.filter(is_fav=True).order_by('status')
+        return Task.objects.filter(is_fav=True, users=self.request.user.id).order_by('status')
 
 
-# class SearchFormView(FormView):
-#     template_name = 'manager/index.html'
-#     form_class = SearchForm
-#     context_object_name = 'task'
-#
-#     def form_valid(self, form):
-#         query = form.cleaned_data['query']
-#         result = Task.objects.filter(Q(title__icontains=query) | Q(content__icontains=query))
-#         context = self.get_context_data(form=form, result=result)
-#         return self.render_to_response(context)
+def page_not_found_view(request, exception):
+    return render(request, 'manager/404page.html', status=404)

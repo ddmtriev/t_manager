@@ -7,13 +7,18 @@ from .models import *
 class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
-        fields = ['title', 'content', 'deadline', 'priority']
+        fields = ['title', 'content', 'deadline', 'priority', 'users']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
             'priority': forms.Select(attrs={'class': 'form-select'}),
-            'deadline': forms.SelectDateWidget(attrs={'class': 'form-select'})
+            'deadline': forms.SelectDateWidget(attrs={'class': 'form-select'}),
+            'users': forms.CheckboxSelectMultiple(),
         }
+
+    def __init__(self, *args, **kwargs):
+        super(TaskForm, self).__init__(*args, **kwargs)
+        self.fields['users'].queryset = User.objects.all()
 
 
 class UserRegisterForm(UserCreationForm):
