@@ -13,21 +13,10 @@ from django.contrib import messages
 def search(request):
     query = request.GET.get('search')
     if query:
-        tasks = Task.objects.filter(title__icontains=query)
+        tasks = Task.objects.filter(Q(title__icontains=query) | Q(content__icontains=query))
     else:
+        messages.error(request, 'Поиск не дал результатов')
         tasks = Task.objects.all()
-
-    # form = SearchForm(request.GET)
-    # # print(form)
-    # task = []
-    #
-    # if form.is_valid():
-    #     query = form.cleaned_data['query']
-    #     print(query)
-    #     task = Task.objects.filter(title__icontains=query)
-    #     print(task)
-    # else:
-    #     messages.error(request, 'Поиск не дал результатов')
     return render(request, 'manager/index.html', {'task': tasks})
 
 
