@@ -11,5 +11,6 @@ urlpatterns = [
     path('task/<int:task_id>', add_fav, name='add_fav'),
     path('create-task/', CreateTask.as_view(), name='add_task'),
     path('complete-task/<int:task_id>', complete_task, name='complete'),
-    path('delete/<int:task_id>', delete_task, name='delete')
+    path('delete/<int:task_id>', delete_task, name='delete'),
+    path('search/', search, name='search')
 ]

@@ -26,8 +26,9 @@
             </li>
             {% endif %}
           </ul>
-          <form class="d-flex" role="search">
-            <input class="form-control me-2 px-4 rounded-pill" type="search" placeholder="Поиск задачи" aria-label="Search">
+          <form class="d-flex" role="search" method="get" action="{% url 'search' %}">
+            <input class="form-control me-2 px-4 rounded-pill" type="search" placeholder="Поиск задачи"
+                   aria-label="Search" name="search">
             <button class="btn btn-outline-success px-4 rounded-pill" type="submit">Найти</button>
           </form>
         </div>

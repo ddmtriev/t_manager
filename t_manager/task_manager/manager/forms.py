@@ -31,19 +31,14 @@ class UserRegisterForm(UserCreationForm):
             'post': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'password1': forms.PasswordInput(attrs={'class': 'form-control'}),
-            'password2': forms.PasswordInput(attrs={'class': 'form-control'}),
+            'password2': forms.PasswordInput(attrs={'class': 'form-control'})
         }
-
-        # def clean_password(self):
-        #     password = self.cleaned_data.get('password')
-        #     if len(password) < 8:
-        #         raise forms.ValidationError('Пароль должен содержать не менее 8 символов.')
-        #     return password
-        #
-        # def save(self, commit=True):
-        #     user = super(UserRegisterForm).save(commit=False)
 
 
 class UserLoginForm(AuthenticationForm):
     username = forms.CharField(label='Имя пользователя', widget=forms.TextInput(attrs={'class': 'form-control'}))
     password = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+
+
+class SearchForm(forms.Form):
+    query = forms.CharField(label='Search')

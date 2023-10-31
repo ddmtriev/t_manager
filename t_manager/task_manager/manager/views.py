@@ -1,12 +1,34 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import *
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, FormView
 from django.core.paginator import Paginator
 from .forms import *
 from django.contrib import messages
+
+
+def search(request):
+    query = request.GET.get('search')
+    if query:
+        tasks = Task.objects.filter(title__icontains=query)
+    else:
+        tasks = Task.objects.all()
+
+    # form = SearchForm(request.GET)
+    # # print(form)
+    # task = []
+    #
+    # if form.is_valid():
+    #     query = form.cleaned_data['query']
+    #     print(query)
+    #     task = Task.objects.filter(title__icontains=query)
+    #     print(task)
+    # else:
+    #     messages.error(request, 'Поиск не дал результатов')
+    return render(request, 'manager/index.html', {'task': tasks})
 
 
 def user_logout(request):
@@ -115,3 +137,15 @@ class FavTaskView(ListView):
 
     def get_queryset(self):
         return Task.objects.filter(is_fav=True).order_by('status')
+
+
+# class SearchFormView(FormView):
+#     template_name = 'manager/index.html'
+#     form_class = SearchForm
+#     context_object_name = 'task'
+#
+#     def form_valid(self, form):
+#         query = form.cleaned_data['query']
+#         result = Task.objects.filter(Q(title__icontains=query) | Q(content__icontains=query))
+#         context = self.get_context_data(form=form, result=result)
+#         return self.render_to_response(context)
